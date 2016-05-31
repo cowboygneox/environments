@@ -1,0 +1,29 @@
+version: "2"
+services:
+  server:
+    image: "gitlab/gitlab-ce:latest"
+    hostname: "gitlab.gneoxsolutions.com"
+    restart: "always"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.gneoxsolutions.com'
+    ports:
+      - "22:22"
+      - "443:443"
+      - "80:80"
+    volumes:
+      - "server_config:/etc/gitlab"
+      - "server_logs:/var/log/gitlab"
+      - "server_data:/var/opt/gitlab"
+  runner:
+    image: "gitlab/gitlab-runner:latest"
+    restart: "always"
+    links:
+      - server
+    volumes:
+      - "runner_config:/etc/gitlab-runner"
+volumes:
+  server_config: {}
+  server_logs: {}
+  server_data: {}
+  runner_config: {}
